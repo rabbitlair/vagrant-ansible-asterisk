@@ -1,0 +1,14 @@
+---
+- name: Provision Asterisk server
+  hosts: all
+  sudo: true
+  vars_files:
+  - ../settings.yml
+
+  roles:
+  - role: ntp
+  - role: asterisk
+
+  handlers:
+  - include: common/handlers/main.yml
+

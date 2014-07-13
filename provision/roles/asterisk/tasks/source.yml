@@ -1,0 +1,51 @@
+---
+- name: Create directory for source code
+  file:
+    path: /usr/src/asterisk
+    owner: root
+    group: root
+    state: directory
+  tags: asterisk source
+
+- name: Download Asterisk source code
+  command:
+    wget http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-11-current.tar.gz
+    chdir=/tmp
+  tags: asterisk source
+
+- name: Uncompress Asterisk sources
+  command:
+    tar -xzf /tmp/asterisk-11-current.tar.gz
+    chdir=/usr/src/asterisk
+  tags: asterisk source
+
+- name: Get Asterisk source directory full path
+  command:
+    find /usr/src/asterisk -maxdepth 1 -type d -name asterisk-*
+  register: asterisk_src_dir
+  tags: asterik source
+
+- name: Set Debconf selections
+  copy:
+    content: "libvpb0 libvpb0/countrycode string 34"
+    dest: /tmp/debconf.conf
+    mode: 0644
+    owner: root
+    group: root
+  tags: asterisk prefix
+
+- name: Load debconf selections
+  shell: cat /tmp/debconf.conf | debconf-set-selections
+
+- name: Execute prereq test
+  command:
+    ./contrib/scripts/install_prereq test
+    chdir={{ asterisk_src_dir.stdout }}
+  register: asterisk_test_result
+  tags: asterik source
+
+- name: Install remaining dependencies
+  command:
+    "{{ asterisk_test_result.stdout_lines[4] }}"
+  tags: asterisk source dependencies
+

@@ -1,0 +1,8 @@
+---
+- include: dependencies.yml
+- include: source.yml
+- include: srtp.yml
+- include: dahdi.yml
+- include: libpri.yml
+- include: asterisk.yml
+- include: config.yml

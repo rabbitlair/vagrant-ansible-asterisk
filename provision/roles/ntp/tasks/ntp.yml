@@ -1,0 +1,14 @@
+---
+- name: Install NTP service
+  apt:
+    name: ntp
+    update_cache: yes
+    state: latest
+  tags: ntp
+
+- name: Start NTP daemon
+  service:
+    name: ntp
+    state: started
+  tags: ntp
+

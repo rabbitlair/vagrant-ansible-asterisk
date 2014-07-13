@@ -1,0 +1,19 @@
+; {{ ansible_managed }}
+
+[general]
+static=yes
+writeprotect=no
+clearglobalvars=yes
+
+[globals]
+
+[noauthenticated]
+
+
+[{{ asterisk_context }}]
+exten => {{ asterisk_extension_tpl }},1,Answer()
+{% for user in asterisk_users %}
+same => n,Dial(SIP/{{ user.id }},10)
+{% endfor %}
+same => n,Hangup
+

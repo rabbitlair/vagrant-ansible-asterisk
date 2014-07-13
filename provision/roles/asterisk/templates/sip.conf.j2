@@ -1,0 +1,66 @@
+; {{ ansible_managed }}
+
+[general]
+realm={{ asterisk_realm }}
+context = noauthenticated
+allowguest = no
+tcpenable=yes
+tlsenable=yes
+udpbindaddr = {{ asterisk_ip }}:{{ asterisk_tcp_port }}
+tcpbindaddr = {{ asterisk_ip }}:{{ asterisk_udp_port }}
+tlsbindaddr = {{ asterisk_ip }}:{{ asterisk_tls_port }}
+transport=tcp,udp,tls
+tlscertfile=/etc/asterisk/keys/asterisk.pem
+tlsprivatekey=/etc/asterisk/keys/asterisk.key
+tlscafile=/etc/asterisk/keys/ca.crt
+tlscipher=ALL
+tlsclientmethod=tlsv1
+
+dtmfmode = rfc2833
+
+disallow = all
+allow = gsm
+allow = ilbc
+allow = alaw
+allow = ulaw
+allow = g722
+allow = g726aal2
+allow = g726
+g726nonstandard = yes
+
+language=en
+
+session-expires=300
+allowsubscribe=no
+
+sendrpid=pai
+trustrpid=no
+
+alwaysauthreject=yes
+useragent=pbx
+
+nat=no
+directmedia=nonat
+sdpsession=pbx
+encryption=yes
+encryption_taglen=32
+avpf=yes
+
+[phone](!)
+type=friend
+host=dynamic
+directmedia=no
+disallow=all
+allow=gsm
+dtmfmode=rfc2833
+qualify=yes
+qualifyfreq=50
+
+{% for user in asterisk_users %}
+[{{ user.id }}](phone)
+callerid="{{ user.callerid }}" <{{ user.extension }}>
+secret={{ user.secret }}
+context={{ user.context }}
+
+{% endfor %}
+

@@ -1,0 +1,28 @@
+---
+- name: Set modules.conf from template
+  template:
+    src: modules.conf.j2
+    dest: /etc/asterisk/modules.conf
+    owner: "{{ asterisk_user }}"
+    group: "{{ asterisk_group }}"
+  notify: Restart Asterisk
+  tags: asterisk config
+
+- name: Set sip.conf from template
+  template:
+    src: sip.conf.j2
+    dest: /etc/asterisk/sip.conf
+    owner: "{{ asterisk_user }}"
+    group: "{{ asterisk_group }}"
+  notify: Restart Asterisk
+  tags: asterisk config
+
+- name: Set extensions.conf from template
+  template:
+    src: extensions.conf.j2
+    dest: /etc/asterisk/extensions.conf
+    owner: "{{ asterisk_user }}"
+    group: "{{ asterisk_group }}"
+  notify: Restart Asterisk
+  tags: asterisk config
+

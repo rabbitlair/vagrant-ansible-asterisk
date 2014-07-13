@@ -1,0 +1,38 @@
+---
+- name: Install dependencies
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: latest
+  with_items:
+    - build-essential
+    - doxygen
+    - subversion
+    - libncurses5-dev
+    - libssl-dev
+    - libxml2-dev
+    - libnewt-dev
+    - libspandsp-dev
+    - libspandsp2
+    - libsqlite3-dev
+    - uuid-dev
+    - vim-nox
+    - sox
+  tags: asterisk dependencies
+
+- name: Create system group for Asterisk
+  group:
+    name: "{{ asterisk_group }}"
+    state: present
+  tags: asterisk group
+
+- name: Create system user for Asterisk
+  user:
+    name: "{{ asterisk_user }}"
+    createhome: no
+    comment: "PBX user"
+    group: "{{ asterisk_group }}"
+    system: yes
+    state: present
+  tags: asterisk user
+

@@ -1,0 +1,19 @@
+---
+- name: Get SRTP sources
+  command:
+    wget http://downloads.sourceforge.net/project/srtp/srtp/1.4.4/srtp-1.4.4.tgz
+    chdir=/tmp
+  tags: asterisk srtp
+
+- name: Uncompress SRTP sources
+  command:
+    tar xzf /tmp/srtp-1.4.4.tgz
+    chdir=/usr/src/asterisk
+  tags: asterisk srtp
+
+- name: Compile and install SRTP
+  shell:
+    ./configure CFLAGS=-fPIC --prefix=/usr && make uninstall && make && make install
+    chdir=/usr/src/asterisk/srtp
+  tags: asterisk srtp
+

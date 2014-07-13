@@ -1,0 +1,25 @@
+---
+- name: Get Libpri sources
+  command:
+    wget http://downloads.asterisk.org/pub/telephony/libpri/libpri-1.4-current.tar.gz
+    chdir=/tmp
+  tags: asterisk libpri
+
+- name: Uncompress Libpri sources
+  command:
+    tar xzf /tmp/libpri-1.4-current.tar.gz
+    chdir=/usr/src/asterisk
+  tags: asterisk libpri
+
+- name: Locate exact Libpri source directory
+  shell:
+    find /usr/src/asterisk -maxdepth 1 -type d -name libpri-1.4*
+  register: libpri_src_dir
+  tags: asterisk libpri
+
+- name: Compile and install Libpri
+  shell:
+    make && make install
+    chdir={{ libpri_src_dir.stdout }}
+  tags: asterisk libpri
+

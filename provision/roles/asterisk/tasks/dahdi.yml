@@ -1,0 +1,46 @@
+---
+- name: Get DAHDI sources
+  command:
+    wget http://downloads.asterisk.org/pub/telephony/{{ item }}
+    chdir=/tmp
+  with_items:
+    - dahdi-linux-complete/dahdi-linux-complete-current.tar.gz
+  tags: asterisk dahdi
+
+- name: Uncompress DAHDI sources
+  command:
+    tar xzf /tmp/dahdi-linux-complete-current.tar.gz
+    chdir=/usr/src/asterisk
+  tags: asterisk dahdi
+
+- name: Locate exact DAHDI source directory
+  shell:
+    find /usr/src/asterisk -maxdepth 1 -type d -name dahdi-*
+  register: dahdi_src_dir
+  tags: asterisk libpri
+
+- name: Compile and install DAHDI
+  shell:
+    make && make install && make config
+    chdir={{ dahdi_src_dir.stdout }}
+  tags: asterisk dahdi
+
+- name: Configure DAHDI modules
+  template:
+    src: dahdi_modules.j2
+    dest: /etc/dahdi/modules
+    owner: root
+    group: root
+  tags: asterisk dahdi
+
+- name: Load DAHDI driver
+  command:
+    modprobe dahdi_dummy
+  tags: asterisk dahdi
+
+- name: Start DAHDI service
+  service:
+    name: dahdi
+    state: restarted
+  tags: asterisk dahdi
+
