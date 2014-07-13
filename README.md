@@ -1,6 +1,6 @@
 ## vagrant-ansible-asterisk
 
-Ansible script to build an Asterisk server over Vagrant VM, for testing purposes. This repository offers a very simple setup for testing purposes, and should *NOT* be deployed on production environment.
+Ansible script to build an Asterisk server over Vagrant VM. This repository offers a very simple setup for testing purposes, and should **NOT** be deployed on production environment.
 
 ### Install
 
