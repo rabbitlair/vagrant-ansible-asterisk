@@ -11,9 +11,7 @@ clearglobalvars=yes
 
 
 [{{ asterisk_context }}]
-exten => {{ asterisk_extension_tpl }},1,Answer()
 {% for user in asterisk_users %}
-same => n,Dial(SIP/{{ user.id }},10)
+exten => {{ user.extension }},1,Dial(SIP/{{ user.id }})
 {% endfor %}
-same => n,Hangup
 
