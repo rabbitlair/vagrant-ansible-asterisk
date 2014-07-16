@@ -9,9 +9,10 @@ clearglobalvars=yes
 
 [noauthenticated]
 
-
 [{{ asterisk_context }}]
 {% for user in asterisk_users %}
 exten => {{ user.extension }},1,Dial(SIP/{{ user.id }})
+ same => n,Hangup()
+
 {% endfor %}
 

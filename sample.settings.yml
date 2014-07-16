@@ -4,6 +4,7 @@ boxipaddress: "0.0.0.0"
 boxname: "asterisk"
 interface: "eth0"
 organization: "Asterisk"
+hosts_file: "/etc/hosts"
 
 # Asterisk user and group
 asterisk_user: "asterisk"
@@ -14,6 +15,8 @@ asterisk_ip: "{{ boxipaddress }}"
 asterisk_tcp_port: 5060
 asterisk_udp_port: 5060
 asterisk_tls_port: 5061
+asterisk_transport: "tls,tcp,udp"
+asterisk_encryption: "yes"
 
 # Asterisk sip settings
 asterisk_realm: "realm"

@@ -38,17 +38,33 @@
   lineinfile: "dest={{ hosts_file }} state=present line='{{ boxipaddress }} {{ boxname }}'"
   tags: asterisk certificates
 
-- name: Generate CA certificate
+- name: Generate CA and server certificates
   command:
     ./ast_tls_cert -C {{ boxname }} -O "{{ organization }}" -d /etc/asterisk/keys
     chdir={{ asterisk_src_dir.stdout }}/contrib/scripts
   tags: asterisk certificates
 
-- name: Generate server certificate
+- name: Generate client certificate
   command:
-    ./ast_tls_cert -C {{ boxname }} -m client -c /etc/asterisk/keys/ca.crt -k /etc/asterisk/keys/ca.key -O "{{ organization }}" -d /etc/asterisk/keys
+    ./ast_tls_cert -C {{ boxname }} -m client -c /etc/asterisk/keys/ca.crt -k /etc/asterisk/keys/ca.key -O "{{ organization }}" -d /etc/asterisk/keys -o client
     chdir={{ asterisk_src_dir.stdout }}/contrib/scripts
   tags: asterisk certificates
+
+- name: Make Asterisk service to be executed as Asterisk user
+  replace:
+    dest: "/etc/default/asterisk"
+    regexp: "#AST_USER"
+    replace: "AST_USER"
+  notify: Restart Asterisk
+  tags: asterisk permissions
+
+- name: Make Asterisk service to be executed as Asterisk group
+  replace:
+    dest: "/etc/default/asterisk"
+    regexp: "#AST_GROUP"
+    replace: "AST_GROUP"
+  notify: Restart Asterisk
+  tags: asterisk permissions
 
 - name: Change permissions on Asterisk directories
   file:
@@ -65,5 +81,5 @@
     - /var/spool/asterisk
     - /var/www
   notify: Restart Asterisk
-  tags: asterisk
+  tags: asterisk permissions
 
