@@ -58,7 +58,7 @@ qualifyfreq=50
 
 {% for user in asterisk_users %}
 [{{ user.id }}](phone)
-callerid="{{ user.callerid }}" <{{ user.extension }}>
+callerid="{{ user.callerid }}"
 secret={{ user.secret }}
 context={{ user.context }}
 

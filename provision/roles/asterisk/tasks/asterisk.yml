@@ -34,15 +34,19 @@
     regexp: '\s-des3'
   tags: asterisk certificates
 
+- name: Add reference of host to local hosts file
+  lineinfile: "dest={{ hosts_file }} state=present line='{{ boxipaddress }} {{ boxname }}'"
+  tags: asterisk certificates
+
 - name: Generate CA certificate
   command:
-    ./ast_tls_cert -C {{ boxipaddress }} -O "Asterisk" -d /etc/asterisk/keys
+    ./ast_tls_cert -C {{ boxname }} -O "{{ organization }}" -d /etc/asterisk/keys
     chdir={{ asterisk_src_dir.stdout }}/contrib/scripts
   tags: asterisk certificates
 
 - name: Generate server certificate
   command:
-    ./ast_tls_cert -m client -c /etc/asterisk/keys/ca.crt -k /etc/asterisk/keys/ca.key -O "Asterisk" -d /etc/asterisk/keys
+    ./ast_tls_cert -C {{ boxname }} -m client -c /etc/asterisk/keys/ca.crt -k /etc/asterisk/keys/ca.key -O "{{ organization }}" -d /etc/asterisk/keys
     chdir={{ asterisk_src_dir.stdout }}/contrib/scripts
   tags: asterisk certificates
 

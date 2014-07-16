@@ -3,6 +3,7 @@
 boxipaddress: "0.0.0.0"
 boxname: "asterisk"
 interface: "eth0"
+organization: "Asterisk"
 
 # Asterisk user and group
 asterisk_user: "asterisk"
@@ -17,7 +18,6 @@ asterisk_tls_port: 5061
 # Asterisk sip settings
 asterisk_realm: "realm"
 asterisk_context: "internal"
-asterisk_extension_tpl: "_3XX"
 
 # Asterisk users
 asterisk_users:
