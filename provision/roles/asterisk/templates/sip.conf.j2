@@ -38,15 +38,13 @@ sendrpid=pai
 trustrpid=no
 alwaysauthreject=yes
 useragent=pbx
-nat=no
-directmedia=nonat
+nat=auto_force_rport,auto_comedia
 sdpsession=pbx
 avpf=yes
 
 [phone](!)
 type=friend
 host=dynamic
-directmedia=no
 disallow=all
 allow=gsm
 dtmfmode=rfc2833
