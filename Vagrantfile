@@ -24,15 +24,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.customize ["modifyvm", :id, "--memory", 512]
   end
 
-  # Add an Ansible playbooks that executes when the box is destroyed to clear things up.
-  if Vagrant.has_plugin?("vagrant-triggers")
-    config.trigger.before :destroy, :stdout => true do
-      run "rm vagrant_ansible_inventory_default"
-    end
-  end
-
   # SSH Set up.
   config.ssh.forward_agent = true
+
+  # Set machine name.
+  config.vm.define boxname do |t|
+  end
 
   # Provision vagrant box with ansible.
   config.vm.provision "ansible" do |ansible|
